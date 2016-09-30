@@ -9,6 +9,7 @@ paper.html: paper.md
 paper.md: 00-abstract.md 01-introduction.md 02-discussion.md 03-conclusions.md
 
 clean:
+	rm paper.md
 	rm paper.html
 
 skeleton:
