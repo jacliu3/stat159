@@ -59,5 +59,46 @@ and readers alike to know which commands and parameters were used and in what or
 ![](../images/git-logo.png "Git logo")
 </center>
 
+Given all these tools for generating a report, what happens if we want to return 
+to a previous version? The only thing to do really is hit ctrl-z multiple times,
+but if the file has already been saved and closed, then even that is no longer an
+option. The solution here is git, a version control system that allows us to save
+snapshots (aka a *commit*) of a project at a given point in time. A text description
+(aka a *commit message*) is appended to each snapshot to help document what was 
+achieved in that step. For instead, for this paper, I might create a commit when I 
+write the abstract with the message "Wrote the abstract" and commit again later with
+the message "Wrote the introduction". Changes made to the project can be viewed as
+a series of commits, and each commit can be undone if needed (meaning all the 
+changes made in that commit would be deleted). Git, in controlling "versions" of
+the project, not only preserves a history of a project but also allows for multiple
+copies of a project to exist at a certain point in time. Here, if I am writing this
+paper and have a sudden stroke of inspiration to make it into an app complete 
+with games, I might be hesitant to change the paper in case I can't finish the app
+before the deadline. Git allows me to create a copy of my paper (called a *branch*)
+and make changes there while preserving the original paper. This way, if the app idea
+crashes and burns, I can return to my original copy and submit that for a grade. If
+the app works, I can *merge* the new branch with the original grade, so all the changes
+I made are reflected in the original paper. Because the changes are only consolidated
+when I call *merge*, I can be sure that the original paper will only changes once I 
+want it to (which in this case would be when the app is fully functional). This idea
+of branching extends to multiple people; team members can all be working with their 
+own branches (copies) of the project and merge their changes onto the default copy
+once they're sure their code/changes work. They can also checkout other people's branches
+to see what they're up to with a simple command of *checkout*. Git's varied 
+functionality is very important for reproducible research, as it helps document 
+the stages of a project. 
 
+---
 
+<center>
+![](../images/github-logo.png "GitHub logo")
+</center>
+
+The question arises: yes we're using git, but how can other people see the code that
+is on my laptop? This is why, in conjunction with git, we also use GitHub, an online
+system that hosts projects. Each project has a specific URL so when I make commits
+for this paper, I can *push* those changes to the Internet at that URL and other people
+can *pull* my changes from that URL onto their computers. There are other companies
+that offer similar servies (like BitBucket), but GitHub is the most popular. This paper
+exists on GitHub too (see github.com/jacliu3/stat159/project1) so others can read and,
+more importantly, grade it. 
