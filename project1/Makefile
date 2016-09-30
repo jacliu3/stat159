@@ -1,16 +1,24 @@
 #variables
 IMGURL = https://github.com/ucb-stat159/stat159-fall-2016/raw/master/projects/proj01/images/
+PP = paper/paper
+PPATH = paper/sections/
+ABS = $(PPATH)00-abstract.md
+INT = $(PPATH)01-introduction.md 
+DIS = $(PPATH)02-discussion.md 
+CON = $(PPATH)03-conclusions.md
 
 #targets
-.PHONY: clean skeleton
+.PHONY: clean skeleton paper
 
-paper.html: paper.md
+paper.html: $(PP).md
+	pandoc -s -o $(PP).html $<
 
-paper.md: 00-abstract.md 01-introduction.md 02-discussion.md 03-conclusions.md
+paper/paper.md: $(ABS) $(INT) $(DIS) $(CON)
+	pandoc -s -o $(PP).md $^
 
 clean:
-	rm paper.md
-	rm paper.html
+	rm $(PP).md
+	rm $(PP).html
 
 skeleton:
 	mkdir paper paper/sections images
