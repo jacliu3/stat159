@@ -1,5 +1,6 @@
 #variables
 DATAURL = http://www-bcf.usc.edu/~gareth/ISL/Advertising.csv
+AD = data/Advertising.csv
 
 #targets
 .PHONY: all data clean skeleton
@@ -9,14 +10,14 @@ all: report.pdf eda-output.txt regression.RData
 report.pdf: report/report.Rmd
 	idk
 
-eda-output.txt: code/eda-script.R
+eda-output.txt: code/eda-script.R $(AD)
 	Rscript $<
 
-regression.Rdata: regression-script.R
+regression.Rdata: code/regression-script.R
 	Rscript $<
 
 data:
-	curl $(DATAURL) --output data/Advertising.csv 
+	curl $(DATAURL) --output $(AD)
 
 clean:
 	rm report/report.pdf
