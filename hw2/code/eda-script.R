@@ -7,8 +7,9 @@ ad.data$X <- NULL
 
 # Generating the summary report
 # Can also use sink() command to save output
-ad.summary <- summary(ad.data)
-capture.output(ad.summary, file=paste0(path, "data\\eda-output.txt"))
+sink(file=paste0(path, "data\\eda-output.txt"))
+summary(ad.data)
+sink()
 
 # Generating histograms to help visualize distributions
 tv.hist <- ggplot(data=ad.data, aes(ad.data$TV)) + geom_histogram(alpha=0.7)
