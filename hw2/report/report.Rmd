@@ -1,0 +1,93 @@
+---
+title: "Linear Regression Report"
+author: "Jacqueline Liu"
+date: "October 8, 2016"
+output: pdf_document
+header-includes:
+- \usepackage{float}
+---
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(fig.width=4, fig.height=2.7, fig.aligh='center', echo=FALSE, warning=FALSE, message=FALSE)
+library(png)
+library(grid)
+library(xtable)
+options(xtable.comment = FALSE,
+        xtable.table.placement="H")
+path <- "C:\\Users\\Jacqueline\\berkeley\\2016fall\\stat159\\hw2\\"
+load(paste0(path,"data\\regression.Rdata"))
+```
+
+### Abstract:
+Linear regression is a simple, yet powerful method of modeling and supervised learning. Many real-world phenomena can be represented as a linear model, or with other models that employ linear regression. The well-known and well-referenced text **An Introduction to Statistical Learning** covers this technique in chapter 3, section 1 *Simple Linear Regression*. Here we will reproduce their results to highlight key steps and ideas.
+
+
+### Introduction:
+There is a wide variety of applications for linear regression; it can be used for prediction of response to a medical treatment, forecasting prices of fruits a month from now, or determining whether or not sleep and grades are correlated. Ultimately, the goal is to describe some trend or relationship in a dataset. Once the appropriate model is found, predictions can be made for certain variables if given the values of others and the strength of relationships can be assessed. Here, we'll be looking at a commercial setting and determining the relationship between advertising spending and sales of a given product. Specifically, we want to predict sales given the advertising budget for three different media outlets. 
+
+
+### Data:
+The `Advertising` dataset was 'collected' from 200 different markets. It records the advertising budgets (in thousands of dollars) for `TV`, `Radio`, and `Newspaper` as well as the number of `Sales` (in thounds of units) for each of the markets. Because `Sales` is what we're ultimately trying to predict, it is our response variable while the other three columns will be our features. 
+
+### Methodology:
+We're using linear models, which can be written as:
+$$ Y = \beta_0 + \beta_1 $$
+Given X and Y, the coefficients $\beta_0$ and $\beta_1$ are chosen to minimize the sum of squared errors:
+$$ SSE = \sum (Y - \hat{Y})^2 $$
+giving our regression line the name "least squares regression". There are other loss metrics we could use (weighted errors, least absolute deviation, L1-norm penalty) but least squares is one of the most widedly used. We can regress `Sales` on `TV`, then on `Radio`, and lastly `Newspaper` to find three different linear models. 
+
+\newpage
+### Results:
+The regression coefficients are:
+
+```{r, results='asis'}
+xtable(tv.sum$coefficients, caption="Sales onto TV")
+
+xtable(radio.sum$coefficients, caption="Sales onto Radio")
+
+xtable(news.sum$coefficients, caption="Sales onto Newspaper")
+```
+
+The quality indices are:
+
+```{r, results='asis'}
+xtable(data.frame(Quantity=c('RSS', 'R2', 'F-stat'), 
+                  Value=c(tv.sum$sigma, tv.sum$r.squared, tv.sum$fstatistic['value'])), 
+       caption="TV Regression Quality Indices")
+
+xtable(data.frame(Quantity=c('RSS', 'R2', 'F-stat'), 
+                  Value=c(radio.sum$sigma, radio.sum$r.squared, radio.sum$fstatistic['value'])), 
+       caption="Radio Regression Quality Indices")
+
+xtable(data.frame(Quantity=c('RSS', 'R2', 'F-stat'), 
+                  Value=c(news.sum$sigma, news.sum$r.squared, news.sum$fstatistic['value'])), 
+       caption="Newspaper Regression Quality Indices")
+```
+
+(NOTE: the p-values are not exactly 0, but so small that for all intents and purposes they basically are).
+
+\newpage
+To visualize the data and the proposed model, here are scatterplots with the calculated regression lines:
+
+```{r}
+tv.img <- readPNG(paste0(path, "images\\scatterplot-tv-sales.png"))
+grid.raster(tv.img)
+```
+
+```{r}
+radio.img <- readPNG(paste0(path, "images\\scatterplot-radio-sales.png"))
+grid.raster(radio.img)
+```
+
+```{r}
+news.img <- readPNG(paste0(path, "images\\scatterplot-news-sales.png"))
+grid.raster(news.img)
+```
+
+\newpage
+### Conclusion:
+
+Looking at these results, we can see though the intercepts and slopes are significantly different from 0 (meaning there is a relationship between the advertising budges and 0). However the slopes themselves are not all very large; only `Radio` has a slope in the tenths, vs hundreths, decimal place. However, this isn't to say that the company should spent all its advertising budget on radio advertisements. `TV` has the greatest $R^2$-value, meaning it is best at explaining the variation in `Sales`, which can be clearly seen in the scatterplots. While `Newspaper` has no obvious trend and all values of `Radio` are still correlated low `Sales` values, `TV` is the only to show increases in `Sales` consistently. Another factor to consider is how these features work together, a higher-dimensional relationship not captured in this analysis. 
+
+
+
