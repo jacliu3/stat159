@@ -6,9 +6,10 @@ output: pdf_document
 header-includes:
 - \usepackage{float}
 ---
-
 ```{r echo=FALSE}
 knitr::opts_chunk$set(fig.width=4, fig.height=2.7, fig.aligh='center', echo=FALSE, warning=FALSE, message=FALSE)
+```
+```{r echo=FALSE}
 library(png)
 library(grid)
 library(xtable)
