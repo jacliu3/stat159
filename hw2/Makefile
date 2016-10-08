@@ -1,19 +1,21 @@
 #variables
 DATAURL = http://www-bcf.usc.edu/~gareth/ISL/Advertising.csv
 AD = data/Advertising.csv
+RMD = report/report.Rmd
+SHELL = C:/Windows/System32/cmd.exe
 
 #targets
 .PHONY: all data clean skeleton
 
-all: report.pdf eda-output.txt regression.RData
+all: eda-output.txt regression.RData report.pdf 
 
-report.pdf: report/report.Rmd
-	idk
+report.pdf: regression.Rdata images/scatterplot-* 
+	Rscript -e "library(rmarkdown); render('report/report.Rmd')"
 
 eda-output.txt: code/eda-script.R $(AD)
 	Rscript $<
 
-regression.Rdata: code/regression-script.R
+regression.Rdata: code/regression-script.R $(AD)
 	Rscript $<
 
 data:
