@@ -17,7 +17,7 @@ eda: $(CS)eda-script.R $(AD)
 	Rscript $<
 
 regression: $(CS)regression-script.R $(AD)
-	Rscript regression.Rdata 
+	Rscript $<
 
 tests: $(CF)regression-functions.R $(CT)test-regression.R
 	Rscript -e "library(testthat); test_file(code/tests/test-regression.R)"
