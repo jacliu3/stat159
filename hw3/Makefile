@@ -6,9 +6,10 @@ CF = code/functions/
 CT = code/test/
 
 #targets
-.PHONY: all data eda regression tests report clean deep-clean skeleton
+.PHONY: all data eda regression tests report clean deep-clean skeleton session
 
 all: eda regression report
+	Rscript $(CS)session-info-script.R
 
 data:
 	curl $(DATAURL) --output $(AD)
