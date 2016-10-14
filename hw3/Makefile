@@ -3,7 +3,7 @@ DATAURL = http://www-bcf.usc.edu/~gareth/ISL/Advertising.csv
 AD = data/Advertising.csv
 CS = code/scripts/
 CF = code/functions/
-CT = code/test/
+CT = code/tests/
 
 #targets
 .PHONY: all data eda regression tests report clean deep-clean skeleton session
@@ -20,8 +20,8 @@ eda: $(CS)eda-script.R $(AD)
 regression: $(CS)regression-script.R $(AD)
 	Rscript $<
 
-tests: $(CF)regression-functions.R $(CT)test-regression.R
-	Rscript -e "library(testthat); test_file(code/tests/test-regression.R)"
+tests: code/test-that.R $(CF)regression-functions.R $(CT)test-regression.R
+	Rscript $<
 
 report: regression
 	Rscript -e "library(rmarkdown); render('report/report.Rmd')"

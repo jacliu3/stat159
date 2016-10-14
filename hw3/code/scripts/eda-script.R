@@ -1,8 +1,6 @@
 library(ggplot2)
 
 # Set working directory to that of source file
-# this.dir <- dirname(parent.frame(2)$ofile)
-# setwd(paste0(this.dir, "/../.."))
 path <- getwd()
 
 ad.data <- read.csv(paste0(path, "/data/Advertising.csv"))
