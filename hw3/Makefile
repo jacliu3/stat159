@@ -1,26 +1,30 @@
 #variables
 DATAURL = http://www-bcf.usc.edu/~gareth/ISL/Advertising.csv
 AD = data/Advertising.csv
+CS = code/scripts/
+CF = code/functions/
+CT = code/test/
 
 #targets
-.PHONY: all data clean deep-clean skeleton
+.PHONY: all data eda regression tests report clean deep-clean skeleton
 
-all: eda-output.txt regression.RData report.pdf report.html
-
-report.pdf: regression.Rdata images/scatterplot-* 
-	Rscript -e "library(rmarkdown); render('report/report.Rmd')"
-
-report.html: regression.Rdata images/scatterplot-* 
-	Rscript -e "library(rmarkdown); render('report/report.Rmd', output_format='html_document')"
-
-eda-output.txt: code/eda-script.R $(AD)
-	Rscript $<
-
-regression.Rdata: code/regression-script.R $(AD)
-	Rscript $<
+all: eda regression report
 
 data:
 	curl $(DATAURL) --output $(AD)
+
+eda: $(CS)eda-script.R $(AD)
+	Rscript $<
+
+regression: $(CS)regression-script.R $(AD)
+	Rscript regression.Rdata 
+
+tests: $(CF)regression-functions.R $(CT)test-regression.R
+	Rscript -e "library(testthat); test_file(code/tests/test-regression.R)"
+
+report: regression
+	Rscript -e "library(rmarkdown); render('report/report.Rmd')"
+	Rscript -e "library(rmarkdown); render('report/report.Rmd', output_format='html_document')"
 
 clean:
 	rm report/report.pdf
