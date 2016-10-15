@@ -23,7 +23,7 @@ regression: $(CS)regression-script.R $(AD)
 tests: code/test-that.R $(CF)regression-functions.R $(CT)test-regression.R
 	Rscript $<
 
-report: regression $(CF)regression-functions.R
+report: regression eda $(CF)regression-functions.R
 	Rscript -e "library(rmarkdown); render('report/report.Rmd')"
 	Rscript -e "library(rmarkdown); render('report/report.Rmd', output_format='html_document')"
 
@@ -35,7 +35,7 @@ deep-clean:
 	rm -r -f code data images report
 	
 skeleton:
-	touch .gitignore LICENSE
+	touch .gitignore
 	mkdir data code images report
 	touch data/README.md
 	cd code;\
