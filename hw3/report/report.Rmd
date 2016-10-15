@@ -1,7 +1,7 @@
 ---
 title: "Linear Regression Report"
 author: "Jacqueline Liu"
-date: "October 8, 2016"
+date: "October 15, 2016"
 output: pdf_document
 header-includes:
 - \usepackage{float}
@@ -15,12 +15,14 @@ library(grid)
 library(xtable)
 options(xtable.comment = FALSE,
         xtable.table.placement="H")
-path <- "C:\\Users\\Jacqueline\\berkeley\\2016fall\\stat159\\hw2\\"
-load(paste0(path,"data\\regression.Rdata"))
+path <- getwd()
+load(paste0(path, "/../data/regression.Rdata"))
+load(paste0(path, "/../data/correlation-matrix.Rdata"))
+source(paste0(path, "/../code/functions/regression-functions.R"))
 ```
 
 ### Abstract:
-Linear regression is a simple, yet powerful method of modeling and supervised learning. Many real-world phenomena can be represented as a linear model, or with other models that employ linear regression. The well-known and well-referenced text **An Introduction to Statistical Learning** covers this technique in chapter 3, section 1 *Simple Linear Regression*. Here we will reproduce their results to highlight key steps and ideas.
+Linear regression is a simple, yet powerful method of modeling and supervised learning. Many real-world phenomena can be represented as a linear model, or with other models that employ linear regression. The well-known and well-referenced text **An Introduction to Statistical Learning** covers this technique in chapter 3, sections 1 and 2, which cover simple and multiple linear regression. Here we will reproduce their results to highlight key steps and ideas.
 
 
 ### Introduction:
@@ -32,14 +34,21 @@ The `Advertising` dataset was 'collected' from 200 different markets. It records
 
 ### Methodology:
 We're using linear models, which can be written as:
-$$ Y = \beta_0 + \beta_1 $$
+$$ Y = \beta_0 + \beta_1 X$$
 Given X and Y, the coefficients $\beta_0$ and $\beta_1$ are chosen to minimize the sum of squared errors:
 $$ SSE = \sum (Y - \hat{Y})^2 $$
-giving our regression line the name "least squares regression". There are other loss metrics we could use (weighted errors, least absolute deviation, L1-norm penalty) but least squares is one of the most widedly used. We can regress `Sales` on `TV`, then on `Radio`, and lastly `Newspaper` to find three different linear models. 
+giving our regression line the name "least squares regression". There are other loss metrics we could use (weighted errors, least absolute deviation, L1-norm penalty) but least squares is one of the most widedly used. We can regress `Sales` on `TV`, then on `Radio`, and `Newspaper` to find three different linear models. We will also regress `Sales` on all three variables at once to better understand their high-dimensional relationship, following the model
+$$ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3$$
 
 \newpage
 ### Results:
-The regression coefficients are:
+
+To understand the linear relationship between the features, here is the correlation matrix:
+```{r, results='asis'}
+xtable(cm, caption="Correlation Matrix")
+```
+
+The regression coefficients for the simple linear regression models are:
 
 ```{r, results='asis'}
 xtable(tv.sum$coefficients, caption="Sales onto TV")
@@ -49,39 +58,51 @@ xtable(radio.sum$coefficients, caption="Sales onto Radio")
 xtable(news.sum$coefficients, caption="Sales onto Newspaper")
 ```
 
-The quality indices are:
+and their quality indices:
 
 ```{r, results='asis'}
 xtable(data.frame(Quantity=c('RSS', 'R2', 'F-stat'), 
-                  Value=c(tv.sum$sigma, tv.sum$r.squared, tv.sum$fstatistic['value'])), 
+                  Value=c(residual_std_error(tv.fit), r_squared(tv.fit), f_statistic(tv.fit))), 
        caption="TV Regression Quality Indices")
 
 xtable(data.frame(Quantity=c('RSS', 'R2', 'F-stat'), 
-                  Value=c(radio.sum$sigma, radio.sum$r.squared, radio.sum$fstatistic['value'])), 
+                  Value=c(residual_std_error(radio.fit), r_squared(radio.fit), f_statistic(radio.fit))), 
        caption="Radio Regression Quality Indices")
 
 xtable(data.frame(Quantity=c('RSS', 'R2', 'F-stat'), 
-                  Value=c(news.sum$sigma, news.sum$r.squared, news.sum$fstatistic['value'])), 
+                  Value=c(residual_std_error(news.fit), r_squared(news.fit), f_statistic(news.fit))), 
        caption="Newspaper Regression Quality Indices")
 ```
 
 (NOTE: the p-values are not exactly 0, but so small that for all intents and purposes they basically are).
+For the multiple linear regression, the coefficients are:
 
-\newpage
+The multiple regression model gives rise to the following coefficients and quality indices:
+
+```{r, results='asis'}
+xtable(mult.sum$coefficients, caption="Sales onto TV, Radio, and News")
+
+xtable(data.frame(Quantity=c('RSS', 'R2', 'F-stat'), 
+                  Value=c(residual_std_error(mult.fit), r_squared(mult.fit), f_statistic(mult.fit))), 
+       caption="Multiple Regression Quality Indices")
+```
+
+
+
 To visualize the data and the proposed model, here are scatterplots with the calculated regression lines:
 
 ```{r}
-tv.img <- readPNG(paste0(path, "images\\scatterplot-tv-sales.png"))
+tv.img <- readPNG(paste0(path, "/../images/scatterplot-tv-sales.png"))
 grid.raster(tv.img)
 ```
 
 ```{r}
-radio.img <- readPNG(paste0(path, "images\\scatterplot-radio-sales.png"))
+radio.img <- readPNG(paste0(path, "/../images/scatterplot-radio-sales.png"))
 grid.raster(radio.img)
 ```
 
 ```{r}
-news.img <- readPNG(paste0(path, "images\\scatterplot-news-sales.png"))
+news.img <- readPNG(paste0(path, "/../images/scatterplot-news-sales.png"))
 grid.raster(news.img)
 ```
 
