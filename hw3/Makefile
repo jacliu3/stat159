@@ -23,12 +23,13 @@ regression: $(CS)regression-script.R $(AD)
 tests: code/test-that.R $(CF)regression-functions.R $(CT)test-regression.R
 	Rscript $<
 
-report: regression
+report: regression $(CF)regression-functions.R
 	Rscript -e "library(rmarkdown); render('report/report.Rmd')"
 	Rscript -e "library(rmarkdown); render('report/report.Rmd', output_format='html_document')"
 
 clean:
-	rm report/report.pdf
+	rm -f report/report.pdf
+	rm -f report/report.html
 
 deep-clean:
 	rm -r -f code data images report
