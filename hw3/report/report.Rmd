@@ -48,6 +48,13 @@ To understand the linear relationship between the features, here is the correlat
 xtable(cm, caption="Correlation Matrix")
 ```
 
+and here is the scatterplot matrix:
+
+```{r fig.width=5, fig.height=5}
+sm.img <- readPNG(paste0(path, "/../images/scatterplot-matrix.png"))
+grid.raster(sm.img)
+```
+
 The regression coefficients for the simple linear regression models are:
 
 ```{r, results='asis'}
@@ -88,8 +95,7 @@ xtable(data.frame(Quantity=c('RSS', 'R2', 'F-stat'),
 ```
 
 
-
-To visualize the data and the proposed model, here are scatterplots with the calculated regression lines:
+To visualize the data and the proposed simple linear models, here are scatterplots with the calculated regression lines:
 
 ```{r}
 tv.img <- readPNG(paste0(path, "/../images/scatterplot-tv-sales.png"))
@@ -106,8 +112,23 @@ news.img <- readPNG(paste0(path, "/../images/scatterplot-news-sales.png"))
 grid.raster(news.img)
 ```
 
-\newpage
+The features collectively produce a model with the following residual plot:
+
+```{r}
+res.img <- readPNG(paste0(path, "/../images/residual-plot.png"))
+grid.raster(res.img)
+```
+
+and normal qq plot:
+
+```{r}
+norm.img <- readPNG(paste0(path, "/../images/normal-qq-plot.png"))
+grid.raster(norm.img)
+```
+
 ### Conclusion:
 
-Looking at these results, we can see though the intercepts and slopes are significantly different from 0 (meaning there is a relationship between the advertising budges and 0). However the slopes themselves are not all very large; only `Radio` has a slope in the tenths, vs hundreths, decimal place. However, this isn't to say that the company should spent all its advertising budget on radio advertisements. `TV` has the greatest $R^2$-value, meaning it is best at explaining the variation in `Sales`, which can be clearly seen in the scatterplots. While `Newspaper` has no obvious trend and all values of `Radio` are still correlated low `Sales` values, `TV` is the only to show increases in `Sales` consistently. Another factor to consider is how these features work together, a higher-dimensional relationship not captured in this analysis. 
+Looking at the results for the simple linear models, we can see though the intercepts and slopes are significantly different from 0 (meaning there is a relationship between the advertising budges and 0). However the slopes themselves are not all very large; only `Radio` has a slope in the tenths, vs hundreths, decimal place. However, this isn't to say that the company should spent all its advertising budget on radio advertisements. `TV` has the greatest $R^2$-value, meaning it is best at explaining the variation in `Sales`, which can be clearly seen in the scatterplots. 
+
+However, if we look at the multiple regression model, `Newspaper` is no longer has any significant impact on sales; its slope is now nearly 0 and p-value 0.86. This could be explained by the 0.35 correlation between `Newspaper` and `Radio`; markets with higher spending on news ads are spending more on radio ads too, and it's the radio ads that are boosting sales, not the news. `Radio` and `TV` have regression coefficients that don't vary much between the simple and multiple regression models, and together produce an $R^2$ value of 0.90, which is almost 0.30 better than either had individually. This demonstrates the importance of considering the influence of the relationships between features on our predictors, rather than trying to isolate each. There are also non-linear relationships to consider; the normal qq plot shows a bit a skew so our model is biased. The more hyperparameters involved, however, the more likely the model is prone to overfitting. Hence model selection and hyperparameter tuning always involves a bias-variance tradeoff. 
 
