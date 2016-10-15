@@ -40,7 +40,7 @@ test_that("r2 is correct", {
 # F-statistic
 test_that("f is correct", {
   x <- f_statistic(reg)
-  expect_true(x == regsum$fstatistic[1])
+  expect_equivalent(x, regsum$fstatistic[1])
   expect_length(x, 1)
   expect_type(x, 'double')
 })
